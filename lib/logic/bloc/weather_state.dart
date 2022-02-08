@@ -1,7 +1,7 @@
 part of 'weather_bloc.dart';
 
 @immutable
-abstract class WeatherState {
+abstract class WeatherState extends Equatable {
   const WeatherState();
 }
 
@@ -10,34 +10,36 @@ abstract class WeatherState {
 //WeatherInitial State - When first time app launch
 class WeatherInitial extends WeatherState {
   const WeatherInitial();
+
+  @override
+  List<Object?> get props => [];
 }
 
 //WeatherLoading State - When user enter city name and hit enter and waiting time for fetching data
 class WeatherLoading extends WeatherState {
   const WeatherLoading();
+
+  @override
+  List<Object?> get props => [];
 }
 
 //WeatherLoaded State - After sucsessfully loaded city weather data
 class WeatherLoaded extends WeatherState {
   //weather object use for fetch data in to frontend
   //cityName use for enter city name
-  final Weather weather;
+  // final Weather weather;
+  final double temp;
   final String cityName;
+
   const WeatherLoaded({
-    required this.weather,
+    // required this.weather,
+    required this.temp,
     required this.cityName,
   });
 
   //this part for compare current and previos object. becase when these two objects are simmiller then bloc ignore to responed current object
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is WeatherLoaded && other.weather == weather;
-  }
-
-  @override
-  int get hashCode => weather.hashCode;
+  List<Object?> get props => [temp, cityName];
 }
 
 //WeatherError State - when occuring error
@@ -49,12 +51,5 @@ class WeatherError extends WeatherState {
 
   //this part for compare current and previos object. becase when these two objects are simmiller then bloc ignore to responed current object
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is WeatherError && other.errorMsg == errorMsg;
-  }
-
-  @override
-  int get hashCode => errorMsg.hashCode;
+  List<Object?> get props => [errorMsg];
 }

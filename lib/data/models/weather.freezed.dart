@@ -211,7 +211,8 @@ Main _$MainFromJson(Map<String, dynamic> json) {
 class _$MainTearOff {
   const _$MainTearOff();
 
-  _Main call({@JsonKey(name: 'temp') required double temperature}) {
+  _Main call(
+      {@JsonKey(name: 'temp') @Convertor() required double temperature}) {
     return _Main(
       temperature: temperature,
     );
@@ -228,6 +229,7 @@ const $Main = _$MainTearOff();
 /// @nodoc
 mixin _$Main {
   @JsonKey(name: 'temp')
+  @Convertor()
   double get temperature => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -239,7 +241,7 @@ mixin _$Main {
 abstract class $MainCopyWith<$Res> {
   factory $MainCopyWith(Main value, $Res Function(Main) then) =
       _$MainCopyWithImpl<$Res>;
-  $Res call({@JsonKey(name: 'temp') double temperature});
+  $Res call({@JsonKey(name: 'temp') @Convertor() double temperature});
 }
 
 /// @nodoc
@@ -268,7 +270,7 @@ abstract class _$MainCopyWith<$Res> implements $MainCopyWith<$Res> {
   factory _$MainCopyWith(_Main value, $Res Function(_Main) then) =
       __$MainCopyWithImpl<$Res>;
   @override
-  $Res call({@JsonKey(name: 'temp') double temperature});
+  $Res call({@JsonKey(name: 'temp') @Convertor() double temperature});
 }
 
 /// @nodoc
@@ -297,12 +299,13 @@ class __$MainCopyWithImpl<$Res> extends _$MainCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$_Main implements _Main {
-  _$_Main({@JsonKey(name: 'temp') required this.temperature});
+  _$_Main({@JsonKey(name: 'temp') @Convertor() required this.temperature});
 
   factory _$_Main.fromJson(Map<String, dynamic> json) => _$$_MainFromJson(json);
 
   @override
   @JsonKey(name: 'temp')
+  @Convertor()
   final double temperature;
 
   @override
@@ -335,12 +338,15 @@ class _$_Main implements _Main {
 }
 
 abstract class _Main implements Main {
-  factory _Main({@JsonKey(name: 'temp') required double temperature}) = _$_Main;
+  factory _Main(
+          {@JsonKey(name: 'temp') @Convertor() required double temperature}) =
+      _$_Main;
 
   factory _Main.fromJson(Map<String, dynamic> json) = _$_Main.fromJson;
 
   @override
   @JsonKey(name: 'temp')
+  @Convertor()
   double get temperature;
   @override
   @JsonKey(ignore: true)

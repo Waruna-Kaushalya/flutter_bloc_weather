@@ -38,8 +38,12 @@ abstract class Weather with _$Weather {
 abstract class Main with _$Main {
   @JsonSerializable(explicitToJson: true)
   factory Main({
-    @JsonKey(name: 'temp') required double temperature,
+    @JsonKey(name: 'temp') @Convertor() required double temperature,
   }) = _Main;
 
   factory Main.fromJson(Map<String, dynamic> json) => _$MainFromJson(json);
+}
+
+class Convertor {
+  const Convertor();
 }

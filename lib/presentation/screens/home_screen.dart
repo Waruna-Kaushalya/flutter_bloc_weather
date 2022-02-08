@@ -17,6 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Weather Api"),
+        actions: [SwitchListTile(value: true, onChanged: (newValue) {})],
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -37,7 +38,9 @@ class _MyHomePageState extends State<MyHomePage> {
             } else if (state is WeatherLoading) {
               return loadingindicator();
             } else if (state is WeatherLoaded) {
-              return displayTempAndCityname(state.weather);
+              return displayTempAndCityname(
+                  cityName: state.cityName,
+                  temp: state.temp.toStringAsFixed(0));
             } else {
               return initialInputTextField();
             }
@@ -83,12 +86,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //This widget use for when data is sucssesfully fetched and state is WeatherLoaded
-  Widget displayTempAndCityname(Weather weather) {
+  Widget displayTempAndCityname(
+      {required String cityName, required String temp}) {
     // final cityName = weather.name ?? "";
     // final temp = weather.temp ?? 0;
 
-    final cityName = weather.cityname;
-    final temp = weather.main.temperature;
+    // final cityName = weather.cityname;
+    // final temp = weather.main.temperature;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -100,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         Text(
-          "${temp.toStringAsFixed(1)}°C",
+          "$temp°C",
           style: const TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
