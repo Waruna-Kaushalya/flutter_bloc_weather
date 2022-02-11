@@ -14,28 +14,18 @@ class GetWeather extends WeatherEvent {
   const GetWeather({required this.cityName});
 
   //Generate equality
-  // @override
-  // bool operator ==(Object other) {
-  //   if (identical(this, other)) return true;
-
-  //   return other is GetWeather && other.cityName == cityName;
-  // }
-
-  // @override
-  // int get hashCode => cityName.hashCode;
-
-  //Generate equality
   @override
   List<Object> get props => [cityName];
 }
 
-class CelciostoKelvin extends WeatherEvent {
-  final bool isSelected;
-  const CelciostoKelvin({
-    required this.isSelected,
+class ToggleUnits extends WeatherEvent {
+  // final TemperatureUnits temperatureUnits;
+  final bool isTemperatureUnits;
+  const ToggleUnits({
+    required this.isTemperatureUnits,
   });
 
   //Generate equality
   @override
-  List<Object> get props => [isSelected];
+  List<Object> get props => [isTemperatureUnits];
 }

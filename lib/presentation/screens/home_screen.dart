@@ -17,30 +17,31 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Weather Api"),
-        actions: [SwitchListTile(value: true, onChanged: (newValue) {})],
       ),
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         //BlocConsumer use for listne and response evry state changes simaltaniancly
         child: BlocConsumer<WeatherBloc, WeatherState>(
           listener: (context, state) {
-            if (state is WeatherError && state.errorMsg == "404") {
+            if (state.stateStatus == WeatherStateStatus.failure &&
+                state.errorMsg == "404") {
               snackMsg(context, msg: "City not found");
-            } else if (state is WeatherError && state.errorMsg == "400") {
+            } else if (state.stateStatus == WeatherStateStatus.failure &&
+                state.errorMsg == "400") {
               snackMsg(context, msg: "Network err");
-            } else if (state is WeatherError) {
+            } else if (state.stateStatus == WeatherStateStatus.failure) {
               snackMsg(context, msg: "Something went wrong");
             }
           },
           builder: (context, state) {
-            if (state is WeatherInitial) {
+            if (state.stateStatus == WeatherStateStatus.initial) {
               return initialInputTextField();
-            } else if (state is WeatherLoading) {
+            } else if (state.stateStatus == WeatherStateStatus.loading) {
               return loadingindicator();
-            } else if (state is WeatherLoaded) {
+            } else if (state.stateStatus == WeatherStateStatus.success) {
               return displayTempAndCityname(
                   cityName: state.cityName,
-                  temp: state.temp.toStringAsFixed(0));
+                  temp: state.temperature!.toStringAsFixed(0));
             } else {
               return initialInputTextField();
             }
@@ -61,19 +62,41 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //this widget is initially loaded widget
   Widget initialInputTextField() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 50),
-        child: TextField(
-          onSubmitted: (value) => submitCityname(context, value),
-          textInputAction: TextInputAction.search,
-          decoration: const InputDecoration(
-            hintText: "Enter City Name",
-            suffixIcon: Icon(
-              Icons.search,
+    bool previous = true;
+    return Padding(
+      padding: const EdgeInsets.all(50.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            //Submit city name to fetch weather data
+            onSubmitted: (value) {
+              final weatherBloc = context.read<WeatherBloc>();
+              // weatherCubit.getWeather(cityName.trim());
+              weatherBloc.add(GetWeather(cityName: value.trim()));
+            },
+            textInputAction: TextInputAction.search,
+            decoration: const InputDecoration(
+              hintText: "Enter City Name",
+              suffixIcon: Icon(
+                Icons.search,
+              ),
             ),
           ),
-        ),
+          BlocBuilder<WeatherBloc, WeatherState>(
+            builder: (context, state) {
+              return SwitchListTile(
+                title: const Text("K or C"),
+                onChanged: (newValue) {
+                  context
+                      .read<WeatherBloc>()
+                      .add(ToggleUnits(isTemperatureUnits: newValue));
+                },
+                value: state.temperatureUnitsState,
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -103,12 +126,18 @@ class _MyHomePageState extends State<MyHomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        Text(
-          "$temp°C",
-          style: const TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-          ),
+        BlocBuilder<WeatherBloc, WeatherState>(
+          builder: (context, state) {
+            return Text(
+              state.temperatureUnits == TemperatureUnits.celsius
+                  ? "$temp°C"
+                  : "$temp°K",
+              style: const TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
         ),
         const SizedBox(
           height: 40,

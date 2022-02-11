@@ -22,6 +22,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'weather.freezed.dart';
 part 'weather.g.dart';
 
+enum TemperatureUnits { fahrenheit, celsius }
+
+extension TemperatureUnitsX on TemperatureUnits {
+  bool get isFahrenheit => this == TemperatureUnits.fahrenheit;
+  bool get isCelsius => this == TemperatureUnits.celsius;
+}
+
 @freezed
 abstract class Weather with _$Weather {
   @JsonSerializable(explicitToJson: true)
