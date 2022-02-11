@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_weather_latest_simple_version/data/data_providers/weather_api.dart';
-import 'package:flutter_weather_latest_simple_version/data/reposotories/weather_reposotory.dart';
+import 'package:flutter_weather_latest_simple_version/repository/weather_reposotory.dart';
 import 'package:flutter_weather_latest_simple_version/logic/bloc/weather_bloc.dart';
 // import 'package:flutter_weather_latest_simple_version/logic/cubit/weather_cubit.dart';
 import 'package:flutter_weather_latest_simple_version/presentation/screens/home_screen.dart';
@@ -19,7 +19,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData.dark(),
       home: BlocProvider(
-        create: (context) => WeatherBloc(WeatherReposotory(api: WeatherApi())),
+        create: (context) =>
+            WeatherBloc(WeatherReposotory(apiClient: WeatherApi())),
         child: const MyHomePage(),
       ),
     );

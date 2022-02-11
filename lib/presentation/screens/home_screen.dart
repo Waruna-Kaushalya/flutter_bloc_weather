@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather_latest_simple_version/data/models/weather.dart';
 import 'package:flutter_weather_latest_simple_version/logic/bloc/weather_bloc.dart';
+
+import '../../data/models/weather.dart';
+import '../../repository/models/weather.dart';
 // import 'package:flutter_weather_latest_simple_version/logic/cubit/weather_cubit.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -23,22 +25,30 @@ class _MyHomePageState extends State<MyHomePage> {
         //BlocConsumer use for listne and response evry state changes simaltaniancly
         child: BlocConsumer<WeatherBloc, WeatherState>(
           listener: (context, state) {
-            if (state.stateStatus == WeatherStateStatus.failure &&
-                state.errorMsg == "404") {
-              snackMsg(context, msg: "City not found");
-            } else if (state.stateStatus == WeatherStateStatus.failure &&
-                state.errorMsg == "400") {
-              snackMsg(context, msg: "Network err");
-            } else if (state.stateStatus == WeatherStateStatus.failure) {
-              snackMsg(context, msg: "Something went wrong");
+            if (state.stateStatus.isFailure) {
+              snackMsg(context, msg: state.errorMsg.toString());
             }
+            // if (state.stateStatus == WeatherStateStatus.failure &&
+            //     state.errorMsg == "404") {
+            //   snackMsg(context, msg: "City not found");
+            // }
+            // else if (state.stateStatus == WeatherStateStatus.failure &&
+            //     state.errorMsg == "400") {
+            //   snackMsg(context, msg: "Network err");
+            // } else if (state.stateStatus == WeatherStateStatus.failure &&
+            //     state.errorMsg == "500") {
+            //   snackMsg(context, msg: "Plese submit city name");
+            // } else if (state.stateStatus == WeatherStateStatus.failure &&
+            //     state.errorMsg == "450") {
+            //   snackMsg(context, msg: "Something went wrong");
+            // }
           },
           builder: (context, state) {
-            if (state.stateStatus == WeatherStateStatus.initial) {
+            if (state.stateStatus.isInitial) {
               return initialInputTextField();
-            } else if (state.stateStatus == WeatherStateStatus.loading) {
+            } else if (state.stateStatus.isLoading) {
               return loadingindicator();
-            } else if (state.stateStatus == WeatherStateStatus.success) {
+            } else if (state.stateStatus.isSuccess) {
               return displayTempAndCityname(
                   cityName: state.cityName,
                   temp: state.temperature!.toStringAsFixed(0));

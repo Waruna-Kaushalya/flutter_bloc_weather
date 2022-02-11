@@ -1,40 +1,14 @@
-// import 'package:equatable/equatable.dart';
-
-// class Weather extends Equatable {
-//   final double temp;
-//   final String name;
-
-//   const Weather(this.temp, this.name);
-
-//   //Map response jason body data
-//   Weather.fromJson(Map<String, dynamic> json)
-//       : name = json['name'],
-//         temp = json['main']?['temp'];
-
-//   @override
-//   List<Object?> get props => [temp, name];
-// }
-
-//! second
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'weather.freezed.dart';
 part 'weather.g.dart';
-
-enum TemperatureUnits { fahrenheit, celsius }
-
-extension TemperatureUnitsX on TemperatureUnits {
-  bool get isFahrenheit => this == TemperatureUnits.fahrenheit;
-  bool get isCelsius => this == TemperatureUnits.celsius;
-}
 
 @freezed
 abstract class Weather with _$Weather {
   @JsonSerializable(explicitToJson: true)
   factory Weather({
     @JsonKey(name: 'name') required String cityname,
-    @JsonKey(name: 'main') required Main main,
+    @JsonKey(name: 'main') required Main temperature,
   }) = _Weather;
 
   factory Weather.fromJson(Map<String, dynamic> json) =>
@@ -45,12 +19,8 @@ abstract class Weather with _$Weather {
 abstract class Main with _$Main {
   @JsonSerializable(explicitToJson: true)
   factory Main({
-    @JsonKey(name: 'temp') @Convertor() required double temperature,
+    @JsonKey(name: 'temp') required double temperature,
   }) = _Main;
 
   factory Main.fromJson(Map<String, dynamic> json) => _$MainFromJson(json);
-}
-
-class Convertor {
-  const Convertor();
 }

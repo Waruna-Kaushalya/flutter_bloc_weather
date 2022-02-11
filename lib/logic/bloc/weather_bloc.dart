@@ -1,13 +1,16 @@
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:flutter_weather_latest_simple_version/data/models/failure.dart';
-import 'package:flutter_weather_latest_simple_version/data/models/weather.dart';
+import 'package:flutter_weather_latest_simple_version/repository/models/weather.dart';
 
-import 'package:flutter_weather_latest_simple_version/data/reposotories/weather_reposotory.dart';
+import 'package:flutter_weather_latest_simple_version/repository/weather_reposotory.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../data/models/weather.dart';
 
 part 'weather_event.dart';
 part 'weather_state.dart';
@@ -36,7 +39,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
               .getWeatherLocationData(event.cityName.totrimLower());
 
           // final cityname = weather.cityname;
-          final temp = weather.main.temperature;
+          final temp = weather.temperature;
 
           final units = state.temperatureUnits.isCelsius
               ? TemperatureUnits.celsius
@@ -51,12 +54,20 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
             temperature: temperature,
             temperatureUnits: units,
           ));
+        } on SocketException {
+          emit(state.copyWith(
+            stateStatus: WeatherStateStatus.failure,
+            errorMsg: "Network Error",
+          ));
         } catch (e) {
           final failure = e as Failure;
+
           emit(state.copyWith(
-              stateStatus: WeatherStateStatus.failure,
-              errorMsg: failure.message));
+            stateStatus: WeatherStateStatus.failure,
+            errorMsg: failure.message,
+          ));
         }
+        // }
       }
 
       if (event is ToggleUnits) {
@@ -68,7 +79,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
             ? state.temperature?.toFahrenheitToCelsius()
             : state.temperature?.toCelsiusToFahrenheit();
 
-        if (state.stateStatus.isSuccess) {
+        if (state.stateStatus == WeatherStateStatus.success) {
           emit(state.copyWith(
             temperatureUnitsState: event.isTemperatureUnits,
             cityName: state.cityName,
@@ -77,12 +88,13 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           ));
         }
 
-        if (state.stateStatus.isInitial) {
+        if (state.stateStatus == WeatherStateStatus.failure) {
           emit(state.copyWith(
             temperatureUnitsState: event.isTemperatureUnits,
             // cityName: state.cityName,
             temperatureUnits: units,
             // temperature: temp,
+            errorMsg: "",
           ));
         }
       }

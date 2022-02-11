@@ -1,4 +1,11 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
+
+import 'package:flutter_weather_latest_simple_version/data/models/weather.dart';
+
+import '../models/failure.dart';
 
 class WeatherApi {
   //base url. url end point
@@ -12,14 +19,32 @@ class WeatherApi {
   WeatherApi({http.Client? client}) : _client = client ?? http.Client();
 
   //Fectch weather data from api
-  Future<dynamic> getWeatherRawData(String cityName) async {
+  Future<Weather> getWeatherRawData(String cityName) async {
     final url = '$_baseUrl$cityName&appid=$_apiKey';
 
     final response = await _client.post(
       Uri.parse(url),
     );
 
-    return response;
+    if (response.statusCode == 404) {
+      throw const Failure(message: "City not found");
+    }
+
+    if (response.statusCode != 200) {
+      throw const Failure(message: "Something went wrong");
+    }
+
+    //decode jason response body and map body data
+    Map<String, dynamic> weatherMap = jsonDecode(response.body);
+
+    if (weatherMap.isEmpty) {
+      throw const Failure(message: "message");
+    }
+
+    //Map cityname and temp using weather model and return weather data
+    var weather = Weather.fromJson(weatherMap);
+
+    return weather;
   }
 
   void dispose() {

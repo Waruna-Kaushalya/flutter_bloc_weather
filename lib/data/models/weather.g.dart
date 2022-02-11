@@ -8,13 +8,13 @@ part of 'weather.dart';
 
 _$_Weather _$$_WeatherFromJson(Map<String, dynamic> json) => _$_Weather(
       cityname: json['name'] as String,
-      main: Main.fromJson(json['main'] as Map<String, dynamic>),
+      temperature: Main.fromJson(json['main'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_WeatherToJson(_$_Weather instance) =>
     <String, dynamic>{
       'name': instance.cityname,
-      'main': instance.main.toJson(),
+      'main': instance.temperature.toJson(),
     };
 
 _$_Main _$$_MainFromJson(Map<String, dynamic> json) => _$_Main(
