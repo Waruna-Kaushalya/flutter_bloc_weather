@@ -22,32 +22,68 @@ class WeatherApi {
   Future<Weather> getWeatherRawData(String cityName) async {
     final url = '$_baseUrl$cityName&appid=$_apiKey';
 
-    final response = await _client.post(
-      Uri.parse(url),
-    );
+    // final response = await _client.post(
+    //   Uri.parse(url),
+    // );
 
-    if (response.statusCode == 404) {
-      throw const Failure(message: "City not found");
+    // if (response.statusCode == 404) {
+    //   throw const Failure(message: "City not found");
+    // }
+
+    // if (response.statusCode != 200) {
+    //   throw const Failure(message: "Something went wrong");
+    // }
+
+    // //decode jason response body and map body data
+    // Map<String, dynamic> weatherMap = jsonDecode(response.body);
+
+    // if (weatherMap.isEmpty) {
+    //   throw const Failure(message: "message");
+    // }
+
+    // //Map cityname and temp using weather model and return weather data
+    // var weather = Weather.fromJson(weatherMap);
+
+    // return weather;
+
+    //!
+
+    try {
+      final response = await _client.post(
+        Uri.parse(url),
+      );
+
+      if (response.statusCode == 404) {
+        throw const Failure(message: "City not found");
+      }
+
+      if (response.statusCode != 200) {
+        throw const Failure(message: "Something went wrong");
+      }
+
+      //decode jason response body and map body data
+      Map<String, dynamic> weatherMap = jsonDecode(response.body);
+
+      if (weatherMap.isEmpty) {
+        throw const Failure(message: "message");
+      }
+
+      //Map cityname and temp using weather model and return weather data
+      var weather = Weather.fromJson(weatherMap);
+
+      return weather;
+    } on SocketException {
+      throw const Failure(message: 'No Internet connection 😑');
+    } on HttpException {
+      throw const Failure(message: "Couldn't find the city 😱");
+    } on FormatException {
+      throw const Failure(message: "Bad response format 👎");
     }
-
-    if (response.statusCode != 200) {
-      throw const Failure(message: "Something went wrong");
-    }
-
-    //decode jason response body and map body data
-    Map<String, dynamic> weatherMap = jsonDecode(response.body);
-
-    if (weatherMap.isEmpty) {
-      throw const Failure(message: "message");
-    }
-
-    //Map cityname and temp using weather model and return weather data
-    var weather = Weather.fromJson(weatherMap);
-
-    return weather;
   }
 
   void dispose() {
     _client.close();
   }
 }
+
+class Abc implements Exception {}

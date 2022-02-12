@@ -5,7 +5,7 @@ abstract class WeatherReposotoryClass {
   WeatherReposotoryClass({required this.apiClient});
 
   final WeatherApi apiClient;
-  Future<dynamic> getWeatherLocationData(String cityName);
+  Future<Weather> getWeatherLocationData(String cityName);
 }
 
 class WeatherReposotory implements WeatherReposotoryClass {

@@ -54,11 +54,11 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
             temperature: temperature,
             temperatureUnits: units,
           ));
-        } on SocketException {
-          emit(state.copyWith(
-            stateStatus: WeatherStateStatus.failure,
-            errorMsg: "Network Error",
-          ));
+          // } on SocketException {
+          //   emit(state.copyWith(
+          //     stateStatus: WeatherStateStatus.failure,
+          //     errorMsg: "Network Error",
+          //   ));
         } catch (e) {
           final failure = e as Failure;
 
@@ -79,7 +79,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
             ? state.temperature?.toFahrenheitToCelsius()
             : state.temperature?.toCelsiusToFahrenheit();
 
-        if (state.stateStatus == WeatherStateStatus.success) {
+        if (state.stateStatus.isInitial) {
           emit(state.copyWith(
             temperatureUnitsState: event.isTemperatureUnits,
             cityName: state.cityName,
@@ -88,7 +88,16 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           ));
         }
 
-        if (state.stateStatus == WeatherStateStatus.failure) {
+        if (state.stateStatus.isSuccess) {
+          emit(state.copyWith(
+            temperatureUnitsState: event.isTemperatureUnits,
+            cityName: state.cityName,
+            temperatureUnits: units,
+            temperature: temp,
+          ));
+        }
+
+        if (state.stateStatus.isFailure) {
           emit(state.copyWith(
             temperatureUnitsState: event.isTemperatureUnits,
             // cityName: state.cityName,
