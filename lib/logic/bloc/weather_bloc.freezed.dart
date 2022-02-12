@@ -26,15 +26,17 @@ class _$WeatherStateTearOff {
       {WeatherStateStatus stateStatus = WeatherStateStatus.initial,
       double? temperature,
       required String cityName,
-      bool temperatureUnitsState = false,
-      TemperatureUnits temperatureUnits = TemperatureUnits.fahrenheit,
+      bool isTemperatureUnitsState = false,
+      TemperatureUnits temperatureUnits = TemperatureUnits.kelvin,
+      List<bool> selections = const [true, false],
       String? errorMsg}) {
     return _WeatherState(
       stateStatus: stateStatus,
       temperature: temperature,
       cityName: cityName,
-      temperatureUnitsState: temperatureUnitsState,
+      isTemperatureUnitsState: isTemperatureUnitsState,
       temperatureUnits: temperatureUnits,
+      selections: selections,
       errorMsg: errorMsg,
     );
   }
@@ -52,8 +54,9 @@ mixin _$WeatherState {
   WeatherStateStatus get stateStatus => throw _privateConstructorUsedError;
   double? get temperature => throw _privateConstructorUsedError;
   String get cityName => throw _privateConstructorUsedError;
-  bool get temperatureUnitsState => throw _privateConstructorUsedError;
+  bool get isTemperatureUnitsState => throw _privateConstructorUsedError;
   TemperatureUnits get temperatureUnits => throw _privateConstructorUsedError;
+  List<bool> get selections => throw _privateConstructorUsedError;
   String? get errorMsg => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -71,8 +74,9 @@ abstract class $WeatherStateCopyWith<$Res> {
       {WeatherStateStatus stateStatus,
       double? temperature,
       String cityName,
-      bool temperatureUnitsState,
+      bool isTemperatureUnitsState,
       TemperatureUnits temperatureUnits,
+      List<bool> selections,
       String? errorMsg});
 }
 
@@ -89,8 +93,9 @@ class _$WeatherStateCopyWithImpl<$Res> implements $WeatherStateCopyWith<$Res> {
     Object? stateStatus = freezed,
     Object? temperature = freezed,
     Object? cityName = freezed,
-    Object? temperatureUnitsState = freezed,
+    Object? isTemperatureUnitsState = freezed,
     Object? temperatureUnits = freezed,
+    Object? selections = freezed,
     Object? errorMsg = freezed,
   }) {
     return _then(_value.copyWith(
@@ -106,14 +111,18 @@ class _$WeatherStateCopyWithImpl<$Res> implements $WeatherStateCopyWith<$Res> {
           ? _value.cityName
           : cityName // ignore: cast_nullable_to_non_nullable
               as String,
-      temperatureUnitsState: temperatureUnitsState == freezed
-          ? _value.temperatureUnitsState
-          : temperatureUnitsState // ignore: cast_nullable_to_non_nullable
+      isTemperatureUnitsState: isTemperatureUnitsState == freezed
+          ? _value.isTemperatureUnitsState
+          : isTemperatureUnitsState // ignore: cast_nullable_to_non_nullable
               as bool,
       temperatureUnits: temperatureUnits == freezed
           ? _value.temperatureUnits
           : temperatureUnits // ignore: cast_nullable_to_non_nullable
               as TemperatureUnits,
+      selections: selections == freezed
+          ? _value.selections
+          : selections // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
       errorMsg: errorMsg == freezed
           ? _value.errorMsg
           : errorMsg // ignore: cast_nullable_to_non_nullable
@@ -133,8 +142,9 @@ abstract class _$WeatherStateCopyWith<$Res>
       {WeatherStateStatus stateStatus,
       double? temperature,
       String cityName,
-      bool temperatureUnitsState,
+      bool isTemperatureUnitsState,
       TemperatureUnits temperatureUnits,
+      List<bool> selections,
       String? errorMsg});
 }
 
@@ -153,8 +163,9 @@ class __$WeatherStateCopyWithImpl<$Res> extends _$WeatherStateCopyWithImpl<$Res>
     Object? stateStatus = freezed,
     Object? temperature = freezed,
     Object? cityName = freezed,
-    Object? temperatureUnitsState = freezed,
+    Object? isTemperatureUnitsState = freezed,
     Object? temperatureUnits = freezed,
+    Object? selections = freezed,
     Object? errorMsg = freezed,
   }) {
     return _then(_WeatherState(
@@ -170,14 +181,18 @@ class __$WeatherStateCopyWithImpl<$Res> extends _$WeatherStateCopyWithImpl<$Res>
           ? _value.cityName
           : cityName // ignore: cast_nullable_to_non_nullable
               as String,
-      temperatureUnitsState: temperatureUnitsState == freezed
-          ? _value.temperatureUnitsState
-          : temperatureUnitsState // ignore: cast_nullable_to_non_nullable
+      isTemperatureUnitsState: isTemperatureUnitsState == freezed
+          ? _value.isTemperatureUnitsState
+          : isTemperatureUnitsState // ignore: cast_nullable_to_non_nullable
               as bool,
       temperatureUnits: temperatureUnits == freezed
           ? _value.temperatureUnits
           : temperatureUnits // ignore: cast_nullable_to_non_nullable
               as TemperatureUnits,
+      selections: selections == freezed
+          ? _value.selections
+          : selections // ignore: cast_nullable_to_non_nullable
+              as List<bool>,
       errorMsg: errorMsg == freezed
           ? _value.errorMsg
           : errorMsg // ignore: cast_nullable_to_non_nullable
@@ -193,8 +208,9 @@ class _$_WeatherState implements _WeatherState {
       {this.stateStatus = WeatherStateStatus.initial,
       this.temperature,
       required this.cityName,
-      this.temperatureUnitsState = false,
-      this.temperatureUnits = TemperatureUnits.fahrenheit,
+      this.isTemperatureUnitsState = false,
+      this.temperatureUnits = TemperatureUnits.kelvin,
+      this.selections = const [true, false],
       this.errorMsg});
 
   factory _$_WeatherState.fromJson(Map<String, dynamic> json) =>
@@ -209,16 +225,19 @@ class _$_WeatherState implements _WeatherState {
   final String cityName;
   @JsonKey()
   @override
-  final bool temperatureUnitsState;
+  final bool isTemperatureUnitsState;
   @JsonKey()
   @override
   final TemperatureUnits temperatureUnits;
+  @JsonKey()
+  @override
+  final List<bool> selections;
   @override
   final String? errorMsg;
 
   @override
   String toString() {
-    return 'WeatherState(stateStatus: $stateStatus, temperature: $temperature, cityName: $cityName, temperatureUnitsState: $temperatureUnitsState, temperatureUnits: $temperatureUnits, errorMsg: $errorMsg)';
+    return 'WeatherState(stateStatus: $stateStatus, temperature: $temperature, cityName: $cityName, isTemperatureUnitsState: $isTemperatureUnitsState, temperatureUnits: $temperatureUnits, selections: $selections, errorMsg: $errorMsg)';
   }
 
   @override
@@ -231,10 +250,12 @@ class _$_WeatherState implements _WeatherState {
             const DeepCollectionEquality()
                 .equals(other.temperature, temperature) &&
             const DeepCollectionEquality().equals(other.cityName, cityName) &&
-            const DeepCollectionEquality()
-                .equals(other.temperatureUnitsState, temperatureUnitsState) &&
+            const DeepCollectionEquality().equals(
+                other.isTemperatureUnitsState, isTemperatureUnitsState) &&
             const DeepCollectionEquality()
                 .equals(other.temperatureUnits, temperatureUnits) &&
+            const DeepCollectionEquality()
+                .equals(other.selections, selections) &&
             const DeepCollectionEquality().equals(other.errorMsg, errorMsg));
   }
 
@@ -244,8 +265,9 @@ class _$_WeatherState implements _WeatherState {
       const DeepCollectionEquality().hash(stateStatus),
       const DeepCollectionEquality().hash(temperature),
       const DeepCollectionEquality().hash(cityName),
-      const DeepCollectionEquality().hash(temperatureUnitsState),
+      const DeepCollectionEquality().hash(isTemperatureUnitsState),
       const DeepCollectionEquality().hash(temperatureUnits),
+      const DeepCollectionEquality().hash(selections),
       const DeepCollectionEquality().hash(errorMsg));
 
   @JsonKey(ignore: true)
@@ -264,8 +286,9 @@ abstract class _WeatherState implements WeatherState {
       {WeatherStateStatus stateStatus,
       double? temperature,
       required String cityName,
-      bool temperatureUnitsState,
+      bool isTemperatureUnitsState,
       TemperatureUnits temperatureUnits,
+      List<bool> selections,
       String? errorMsg}) = _$_WeatherState;
 
   factory _WeatherState.fromJson(Map<String, dynamic> json) =
@@ -278,9 +301,11 @@ abstract class _WeatherState implements WeatherState {
   @override
   String get cityName;
   @override
-  bool get temperatureUnitsState;
+  bool get isTemperatureUnitsState;
   @override
   TemperatureUnits get temperatureUnits;
+  @override
+  List<bool> get selections;
   @override
   String? get errorMsg;
   @override

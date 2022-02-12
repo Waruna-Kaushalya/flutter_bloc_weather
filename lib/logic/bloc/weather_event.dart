@@ -21,8 +21,10 @@ class GetWeather extends WeatherEvent {
 class ToggleUnits extends WeatherEvent {
   // final TemperatureUnits temperatureUnits;
   final bool isTemperatureUnits;
+  final List<bool> selections;
   const ToggleUnits({
     required this.isTemperatureUnits,
+    required this.selections,
   });
 
   //Generate equality

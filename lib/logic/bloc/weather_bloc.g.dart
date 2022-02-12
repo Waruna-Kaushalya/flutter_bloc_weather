@@ -13,10 +13,15 @@ _$_WeatherState _$$_WeatherStateFromJson(Map<String, dynamic> json) =>
           WeatherStateStatus.initial,
       temperature: (json['temperature'] as num?)?.toDouble(),
       cityName: json['cityName'] as String,
-      temperatureUnitsState: json['temperatureUnitsState'] as bool? ?? false,
+      isTemperatureUnitsState:
+          json['isTemperatureUnitsState'] as bool? ?? false,
       temperatureUnits: $enumDecodeNullable(
               _$TemperatureUnitsEnumMap, json['temperatureUnits']) ??
-          TemperatureUnits.fahrenheit,
+          TemperatureUnits.kelvin,
+      selections: (json['selections'] as List<dynamic>?)
+              ?.map((e) => e as bool)
+              .toList() ??
+          const [true, false],
       errorMsg: json['errorMsg'] as String?,
     );
 
@@ -25,8 +30,9 @@ Map<String, dynamic> _$$_WeatherStateToJson(_$_WeatherState instance) =>
       'stateStatus': _$WeatherStateStatusEnumMap[instance.stateStatus],
       'temperature': instance.temperature,
       'cityName': instance.cityName,
-      'temperatureUnitsState': instance.temperatureUnitsState,
+      'isTemperatureUnitsState': instance.isTemperatureUnitsState,
       'temperatureUnits': _$TemperatureUnitsEnumMap[instance.temperatureUnits],
+      'selections': instance.selections,
       'errorMsg': instance.errorMsg,
     };
 
@@ -38,6 +44,6 @@ const _$WeatherStateStatusEnumMap = {
 };
 
 const _$TemperatureUnitsEnumMap = {
-  TemperatureUnits.fahrenheit: 'fahrenheit',
+  TemperatureUnits.kelvin: 'kelvin',
   TemperatureUnits.celsius: 'celsius',
 };

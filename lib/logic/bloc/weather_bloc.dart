@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -9,8 +6,6 @@ import 'package:flutter_weather_latest_simple_version/repository/models/weather.
 
 import 'package:flutter_weather_latest_simple_version/repository/weather_reposotory.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../data/models/weather.dart';
 
 part 'weather_event.dart';
 part 'weather_state.dart';
@@ -25,43 +20,57 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   ) : super(WeatherState(
           stateStatus: WeatherStateStatus.initial,
           cityName: "",
-          temperatureUnitsState: false,
-          temperatureUnits: TemperatureUnits.fahrenheit,
+          isTemperatureUnitsState: false,
+          temperatureUnits: TemperatureUnits.kelvin,
         )) {
     on<WeatherEvent>((event, emit) async {
       //need to check which event is comming
 
+      /// [GetWeather] event
       if (event is GetWeather) {
+        /// [catch] errors and exception
         try {
+          /// emit loading state
           emit(state.copyWith(stateStatus: WeatherStateStatus.loading));
 
+          /// fetch [weather] from [weatherReposotory]
           final weather = await weatherReposotory
               .getWeatherLocationData(event.cityName.totrimLower());
 
-          // final cityname = weather.cityname;
+          /// get temperature
           final temp = weather.temperature;
 
-          final units = state.temperatureUnits.isCelsius
-              ? TemperatureUnits.celsius
-              : TemperatureUnits.fahrenheit;
+          /// check which [unit] is selected
+          /// [List<bool> get selections = [true, false] means
+          /// selected unit is [Kelvin]
+          final units = state.selections[0]
+              ? TemperatureUnits.kelvin
+              : TemperatureUnits.celsius;
 
-          final temperature =
-              units.isCelsius ? temp.toFahrenheitToCelsius() : temp;
+          /// if selected [units.isCelsius] then convert Kelvin To Celsius
+          /// if selected [units.Kelvin] then no need to convert
+          /// becase weather api gives unit as kelvin
+          final temperature = units.isCelsius ? temp.toKelvinToCelsius() : temp;
 
+          /// selected unit
+          /// [false, true] = celcios is selected
+          /// [true, false] = kelvin is selected
+          List<bool> selections =
+              units.isCelsius ? [false, true] : [true, false];
+
+          /// emit weather [success] state
           emit(state.copyWith(
             stateStatus: WeatherStateStatus.success,
             cityName: event.cityName.toTrimUpper(),
             temperature: temperature,
             temperatureUnits: units,
+            selections: selections,
           ));
-          // } on SocketException {
-          //   emit(state.copyWith(
-          //     stateStatus: WeatherStateStatus.failure,
-          //     errorMsg: "Network Error",
-          //   ));
         } catch (e) {
           final failure = e as Failure;
 
+          /// emit [failier] state
+          /// msg as [failure.message,]
           emit(state.copyWith(
             stateStatus: WeatherStateStatus.failure,
             errorMsg: failure.message,
@@ -70,41 +79,62 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
         // }
       }
 
+      /// [ToggleUnits] event
       if (event is ToggleUnits) {
-        final units = event.isTemperatureUnits
-            ? TemperatureUnits.celsius
-            : TemperatureUnits.fahrenheit;
+        /// check [previos] state and [current] event are equal or not
+        /// becase if they are equal then overide same state twise
+        /// its effect to temp value
+        if (state.selections[0] != event.selections[0]) {
+          /// check which [unit] is selected
+          /// [List<bool> get selections = [true, false] means
+          /// selected unit is [Kelvin]
+          final units = event.selections[0]
+              ? TemperatureUnits.kelvin
+              : TemperatureUnits.celsius;
 
-        final temp = units.isCelsius
-            ? state.temperature?.toFahrenheitToCelsius()
-            : state.temperature?.toCelsiusToFahrenheit();
+          /// if selected [units.isCelsius] then convert Kelvin To Celsius
+          /// if selected [units.Kelvin] then convert celcios to To Kelvin
+          final temperature = units.isCelsius
+              ? state.temperature?.toKelvinToCelsius()
+              : state.temperature?.toCelsiusToKelvin();
 
-        if (state.stateStatus.isInitial) {
-          emit(state.copyWith(
-            temperatureUnitsState: event.isTemperatureUnits,
-            cityName: state.cityName,
-            temperatureUnits: units,
-            temperature: temp,
-          ));
-        }
+          /// selected unit
+          /// [false, true] = celcios is selected
+          /// [true, false] = kelvin is selected
+          List<bool> selections =
+              units.isCelsius ? [false, true] : [true, false];
 
-        if (state.stateStatus.isSuccess) {
-          emit(state.copyWith(
-            temperatureUnitsState: event.isTemperatureUnits,
-            cityName: state.cityName,
-            temperatureUnits: units,
-            temperature: temp,
-          ));
-        }
+          /// emit state when [isInitial] or [isSuccess]
+          if (state.stateStatus.isInitial || state.stateStatus.isSuccess) {
+            emit(state.copyWith(
+              isTemperatureUnitsState: event.isTemperatureUnits,
+              cityName: state.cityName,
+              temperatureUnits: units,
+              temperature: temperature,
+              selections: selections,
+            ));
+          }
 
-        if (state.stateStatus.isFailure) {
-          emit(state.copyWith(
-            temperatureUnitsState: event.isTemperatureUnits,
-            // cityName: state.cityName,
-            temperatureUnits: units,
-            // temperature: temp,
-            errorMsg: "",
-          ));
+          // if (state.stateStatus.isSuccess) {
+          //   emit(state.copyWith(
+          //     isTemperatureUnitsState: event.isTemperatureUnits,
+          //     cityName: state.cityName,
+          //     temperatureUnits: units,
+          //     temperature: temperature,
+          //     selections: selections,
+          //   ));
+          // }
+
+          /// emit state when [isFailure]
+          ///
+          if (state.stateStatus.isFailure) {
+            emit(state.copyWith(
+              isTemperatureUnitsState: event.isTemperatureUnits,
+              temperatureUnits: units,
+              errorMsg: "",
+              selections: selections,
+            ));
+          }
         }
       }
     });
@@ -113,8 +143,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
 
 /// [extension] for convert celcious to kelvin and kelvin to celcious
 extension on double {
-  double toCelsiusToFahrenheit() => (this + 273.15);
-  double toFahrenheitToCelsius() => (this - 273.15);
+  double toCelsiusToKelvin() => (this + 273.15);
+  double toKelvinToCelsius() => (this - 273.15);
 }
 
 /// [extension] for convert celcious to kelvin and kelvin to celcious

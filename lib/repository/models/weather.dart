@@ -3,10 +3,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'weather.freezed.dart';
 part 'weather.g.dart';
 
-enum TemperatureUnits { fahrenheit, celsius }
+enum TemperatureUnits { kelvin, celsius }
 
 extension TemperatureUnitsX on TemperatureUnits {
-  bool get isFahrenheit => this == TemperatureUnits.fahrenheit;
+  bool get isKelvin => this == TemperatureUnits.kelvin;
   bool get isCelsius => this == TemperatureUnits.celsius;
 }
 

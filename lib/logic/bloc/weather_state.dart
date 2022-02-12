@@ -89,8 +89,9 @@ class WeatherState with _$WeatherState {
     @Default(WeatherStateStatus.initial) WeatherStateStatus stateStatus,
     double? temperature,
     required String cityName,
-    @Default(false) bool temperatureUnitsState,
-    @Default(TemperatureUnits.fahrenheit) TemperatureUnits temperatureUnits,
+    @Default(false) bool isTemperatureUnitsState,
+    @Default(TemperatureUnits.kelvin) TemperatureUnits temperatureUnits,
+    @Default([true, false]) List<bool> selections,
     String? errorMsg,
   }) = _WeatherState;
 
