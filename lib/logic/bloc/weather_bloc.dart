@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_weather_latest_simple_version/data/models/failure.dart';
 import 'package:flutter_weather_latest_simple_version/repository/models/weather.dart';
 
-import 'package:flutter_weather_latest_simple_version/repository/weather_reposotory.dart';
+import 'package:flutter_weather_latest_simple_version/repository/api_weather_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'weather_event.dart';
@@ -14,9 +14,9 @@ part 'weather_bloc.freezed.dart';
 part 'weather_bloc.g.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  final WeatherReposotory weatherReposotory;
+  final ApiWeatherRepository weatherRepository;
   WeatherBloc(
-    this.weatherReposotory,
+    this.weatherRepository,
   ) : super(WeatherState(
           stateStatus: WeatherStateStatus.initial,
           cityName: "",
@@ -34,7 +34,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           emit(state.copyWith(stateStatus: WeatherStateStatus.loading));
 
           /// fetch [weather] from [weatherReposotory]
-          final weather = await weatherReposotory
+          final weather = await weatherRepository
               .getWeatherLocationData(event.cityName.totrimLower());
 
           /// get temperature
@@ -114,16 +114,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
               selections: selections,
             ));
           }
-
-          // if (state.stateStatus.isSuccess) {
-          //   emit(state.copyWith(
-          //     isTemperatureUnitsState: event.isTemperatureUnits,
-          //     cityName: state.cityName,
-          //     temperatureUnits: units,
-          //     temperature: temperature,
-          //     selections: selections,
-          //   ));
-          // }
 
           /// emit state when [isFailure]
           ///

@@ -6,23 +6,23 @@
 // import 'package:meta/meta.dart';
 
 // import 'package:flutter_weather_latest_simple_version/data/models/weather.dart';
-// import 'package:flutter_weather_latest_simple_version/data/reposotories/weather_reposotory.dart';
+// import 'package:flutter_weather_latest_simple_version/data/reposotories/weather_Repository.dart';
 
 // part 'weather_state.dart';
 
 // class WeatherCubit extends Cubit<WeatherState> {
-//   //WeatherReposotory dependency for fetch data from Reposotory
-//   final WeatherReposotory _weatherReposotory;
+//   //WeatherRepository dependency for fetch data from Repository
+//   final WeatherRepository _weatherRepository;
 
-//   WeatherCubit(this._weatherReposotory) : super(const WeatherInitial());
+//   WeatherCubit(this._weatherRepository) : super(const WeatherInitial());
 
-//   //getWeather function use for get weather data from Reposotory.
+//   //getWeather function use for get weather data from Repository.
 //   Future<void> getWeather(String cityName) async {
 //     //notify frontend to Weather loading state
 //     emit(const WeatherLoading());
 
 //     try {
-//       final weather = await _weatherReposotory.getWeatherLocationData(cityName);
+//       final weather = await _weatherRepository.getWeatherLocationData(cityName);
 //       //notify frontend to Weather loaded state with weather data
 //       emit(WeatherLoaded(weather, cityName));
 //     } on SocketException {

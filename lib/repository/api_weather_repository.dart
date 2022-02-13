@@ -1,18 +1,18 @@
 import 'package:flutter_weather_latest_simple_version/data/data_providers/weather_api.dart';
 import 'package:flutter_weather_latest_simple_version/repository/models/weather.dart';
 
-abstract class WeatherReposotoryClass {
-  WeatherReposotoryClass({required this.apiClient});
+abstract class Weatherrepository {
+  Weatherrepository({required this.apiClient});
 
   final WeatherApi apiClient;
   Future<Weather> getWeatherLocationData(String cityName);
 }
 
-class WeatherReposotory implements WeatherReposotoryClass {
+class ApiWeatherRepository implements Weatherrepository {
   //api object use for fetch data from api
   @override
   final WeatherApi apiClient;
-  WeatherReposotory({required this.apiClient});
+  ApiWeatherRepository({required this.apiClient});
 
   //getWeatherLocationData function is asyncrones method and using fetch data and return data to cubit
   @override
