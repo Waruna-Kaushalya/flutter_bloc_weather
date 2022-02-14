@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter_weather_latest_simple_version/logic/bloc/weather_bloc.dart';
-
-import '../../repository/models/weather.dart';
+import '../../logic/bloc/weather_bloc.dart';
 import '../widgets/widgets.dart';
 
 class MyHomePage extends StatefulWidget {

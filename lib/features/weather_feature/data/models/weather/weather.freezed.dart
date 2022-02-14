@@ -24,10 +24,12 @@ class _$WeatherTearOff {
 
   _Weather call(
       {@JsonKey(name: 'name') required String cityname,
-      @JsonKey(name: 'main') required Main temperature}) {
+      @JsonKey(name: 'main') required Main temperature,
+      Failure? failure}) {
     return _Weather(
       cityname: cityname,
       temperature: temperature,
+      failure: failure,
     );
   }
 
@@ -45,6 +47,7 @@ mixin _$Weather {
   String get cityname => throw _privateConstructorUsedError;
   @JsonKey(name: 'main')
   Main get temperature => throw _privateConstructorUsedError;
+  Failure? get failure => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,9 +60,11 @@ abstract class $WeatherCopyWith<$Res> {
       _$WeatherCopyWithImpl<$Res>;
   $Res call(
       {@JsonKey(name: 'name') String cityname,
-      @JsonKey(name: 'main') Main temperature});
+      @JsonKey(name: 'main') Main temperature,
+      Failure? failure});
 
   $MainCopyWith<$Res> get temperature;
+  $FailureCopyWith<$Res>? get failure;
 }
 
 /// @nodoc
@@ -74,6 +79,7 @@ class _$WeatherCopyWithImpl<$Res> implements $WeatherCopyWith<$Res> {
   $Res call({
     Object? cityname = freezed,
     Object? temperature = freezed,
+    Object? failure = freezed,
   }) {
     return _then(_value.copyWith(
       cityname: cityname == freezed
@@ -84,6 +90,10 @@ class _$WeatherCopyWithImpl<$Res> implements $WeatherCopyWith<$Res> {
           ? _value.temperature
           : temperature // ignore: cast_nullable_to_non_nullable
               as Main,
+      failure: failure == freezed
+          ? _value.failure
+          : failure // ignore: cast_nullable_to_non_nullable
+              as Failure?,
     ));
   }
 
@@ -91,6 +101,17 @@ class _$WeatherCopyWithImpl<$Res> implements $WeatherCopyWith<$Res> {
   $MainCopyWith<$Res> get temperature {
     return $MainCopyWith<$Res>(_value.temperature, (value) {
       return _then(_value.copyWith(temperature: value));
+    });
+  }
+
+  @override
+  $FailureCopyWith<$Res>? get failure {
+    if (_value.failure == null) {
+      return null;
+    }
+
+    return $FailureCopyWith<$Res>(_value.failure!, (value) {
+      return _then(_value.copyWith(failure: value));
     });
   }
 }
@@ -102,10 +123,13 @@ abstract class _$WeatherCopyWith<$Res> implements $WeatherCopyWith<$Res> {
   @override
   $Res call(
       {@JsonKey(name: 'name') String cityname,
-      @JsonKey(name: 'main') Main temperature});
+      @JsonKey(name: 'main') Main temperature,
+      Failure? failure});
 
   @override
   $MainCopyWith<$Res> get temperature;
+  @override
+  $FailureCopyWith<$Res>? get failure;
 }
 
 /// @nodoc
@@ -121,6 +145,7 @@ class __$WeatherCopyWithImpl<$Res> extends _$WeatherCopyWithImpl<$Res>
   $Res call({
     Object? cityname = freezed,
     Object? temperature = freezed,
+    Object? failure = freezed,
   }) {
     return _then(_Weather(
       cityname: cityname == freezed
@@ -131,6 +156,10 @@ class __$WeatherCopyWithImpl<$Res> extends _$WeatherCopyWithImpl<$Res>
           ? _value.temperature
           : temperature // ignore: cast_nullable_to_non_nullable
               as Main,
+      failure: failure == freezed
+          ? _value.failure
+          : failure // ignore: cast_nullable_to_non_nullable
+              as Failure?,
     ));
   }
 }
@@ -141,7 +170,8 @@ class __$WeatherCopyWithImpl<$Res> extends _$WeatherCopyWithImpl<$Res>
 class _$_Weather implements _Weather {
   _$_Weather(
       {@JsonKey(name: 'name') required this.cityname,
-      @JsonKey(name: 'main') required this.temperature});
+      @JsonKey(name: 'main') required this.temperature,
+      this.failure});
 
   factory _$_Weather.fromJson(Map<String, dynamic> json) =>
       _$$_WeatherFromJson(json);
@@ -152,10 +182,12 @@ class _$_Weather implements _Weather {
   @override
   @JsonKey(name: 'main')
   final Main temperature;
+  @override
+  final Failure? failure;
 
   @override
   String toString() {
-    return 'Weather(cityname: $cityname, temperature: $temperature)';
+    return 'Weather(cityname: $cityname, temperature: $temperature, failure: $failure)';
   }
 
   @override
@@ -165,14 +197,16 @@ class _$_Weather implements _Weather {
             other is _Weather &&
             const DeepCollectionEquality().equals(other.cityname, cityname) &&
             const DeepCollectionEquality()
-                .equals(other.temperature, temperature));
+                .equals(other.temperature, temperature) &&
+            const DeepCollectionEquality().equals(other.failure, failure));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(cityname),
-      const DeepCollectionEquality().hash(temperature));
+      const DeepCollectionEquality().hash(temperature),
+      const DeepCollectionEquality().hash(failure));
 
   @JsonKey(ignore: true)
   @override
@@ -188,7 +222,8 @@ class _$_Weather implements _Weather {
 abstract class _Weather implements Weather {
   factory _Weather(
       {@JsonKey(name: 'name') required String cityname,
-      @JsonKey(name: 'main') required Main temperature}) = _$_Weather;
+      @JsonKey(name: 'main') required Main temperature,
+      Failure? failure}) = _$_Weather;
 
   factory _Weather.fromJson(Map<String, dynamic> json) = _$_Weather.fromJson;
 
@@ -198,6 +233,8 @@ abstract class _Weather implements Weather {
   @override
   @JsonKey(name: 'main')
   Main get temperature;
+  @override
+  Failure? get failure;
   @override
   @JsonKey(ignore: true)
   _$WeatherCopyWith<_Weather> get copyWith =>

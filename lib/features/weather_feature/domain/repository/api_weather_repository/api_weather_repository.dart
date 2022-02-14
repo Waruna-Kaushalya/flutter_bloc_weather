@@ -1,17 +1,11 @@
-import 'package:flutter_weather_latest_simple_version/data/data_providers/weather_api.dart';
-import 'package:flutter_weather_latest_simple_version/repository/models/weather.dart';
-
-abstract class Weatherrepository {
-  Weatherrepository({required this.apiClient});
-
-  final WeatherApi apiClient;
-  Future<Weather> getWeatherLocationData(String cityName);
-}
+import '../../../data/data.dart' hide Weather;
+import '../../models/models.dart';
+import '../weather_repository/weather_repository.dart';
 
 class ApiWeatherRepository implements Weatherrepository {
   //api object use for fetch data from api
   @override
-  final WeatherApi apiClient;
+  final OpenweathermapWeatherApi apiClient;
   ApiWeatherRepository({required this.apiClient});
 
   //getWeatherLocationData function is asyncrones method and using fetch data and return data to cubit
@@ -21,7 +15,7 @@ class ApiWeatherRepository implements Weatherrepository {
     //rawWeather get response from api using user enter city name
     // final Response rawWeather = await api.getWeatherRawData(cityName);
 
-    final weather = await apiClient.getWeatherRawData(cityName);
+    final weather = await apiClient.getWeather(cityName);
     // if (rawWeather.statusCode == 200) {
     //decode jason response body and map body data
     // Map<String, dynamic> weatherMap = jsonDecode(rawWeather.body);

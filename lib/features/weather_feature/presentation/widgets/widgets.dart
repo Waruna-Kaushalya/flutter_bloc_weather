@@ -1,8 +1,9 @@
 //this Loading indicator widget use for WeatherLoading state
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_weather_latest_simple_version/logic/bloc/weather_bloc.dart';
-import 'package:flutter_weather_latest_simple_version/repository/models/weather.dart';
+
+import '../../domain/models/weather/weather.dart';
+import '../../logic/bloc/weather_bloc.dart';
 
 class LoadingIndicator extends StatelessWidget {
   const LoadingIndicator({
@@ -68,19 +69,26 @@ class InitialInputTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _controller = TextEditingController();
+
     return Padding(
       padding: const EdgeInsets.all(50.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextField(
+            controller: _controller,
             //Submit city name to fetch weather data
+
             onSubmitted: (value) {
-              final weatherBloc = context.read<WeatherBloc>();
-              // weatherCubit.getWeather(cityName.trim());
-              weatherBloc.add(GetWeather(cityName: value.trim()));
+              if (value.isNotEmpty) {
+                final weatherBloc = context.read<WeatherBloc>();
+                // weatherCubit.getWeather(cityName.trim());
+                weatherBloc.add(GetWeather(cityName: value.trim()));
+              }
             },
             textInputAction: TextInputAction.search,
+
             decoration: const InputDecoration(
               hintText: "Enter City Name",
               suffixIcon: Icon(

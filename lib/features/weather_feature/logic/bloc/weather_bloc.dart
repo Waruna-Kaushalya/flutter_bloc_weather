@@ -1,11 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
-import 'package:flutter_weather_latest_simple_version/data/models/failure.dart';
-import 'package:flutter_weather_latest_simple_version/repository/models/weather.dart';
-
-import 'package:flutter_weather_latest_simple_version/repository/api_weather_repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../../data/data.dart' hide Weather;
+
+import '../../domain/domain.dart';
 
 part 'weather_event.dart';
 part 'weather_state.dart';
@@ -33,7 +32,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           /// emit loading state
           emit(state.copyWith(stateStatus: WeatherStateStatus.loading));
 
-          /// fetch [weather] from [weatherReposotory]
+          /// fetch [weather] from [weatherRepository]
           final weather = await weatherRepository
               .getWeatherLocationData(event.cityName.totrimLower());
 
